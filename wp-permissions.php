@@ -14,8 +14,9 @@ add_action('admin_menu', 'wp_permissions_add_page');
 
 // Init plugin options to white list our options
 function wp_permissions_init(){
-	register_setting( 'wp_permissions' );
+    register_setting( 'wp_permissions', 'wp-permissions', 'intval' );
 }
+add_action( 'admin_init', 'wp_permissions_init' );
 
 // Add menu page
 function wp_permissions_add_page() {
