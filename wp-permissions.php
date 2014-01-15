@@ -26,7 +26,7 @@ function wp_permissions_add_page() {
 // Draw the menu page itself
 function wp_permissions_tools_page() {
     $upload_dir =  wp_upload_dir();
-    $path = $upload_dir['path'];
+    $path = $upload_dir['basedir'];
 	?>
 	<div class="wrap">
 		<h2>WordPress Upload Permissions</h2>
