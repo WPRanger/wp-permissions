@@ -19,8 +19,8 @@ Wonder at its astonishing beauty.
 
 #### Changelog
 
-. [v0.1] Initial release
-. [v0.2] Prettify the output.  A table!  Colours!
+* _[v0.1]_ Initial release
+* _[v0.2]_ Prettify the output.  A table!  Colours!
 
 __Dave Naylor__
 [WPRanger](http://wpranger.co.uk)
