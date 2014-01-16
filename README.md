@@ -15,7 +15,8 @@ Upload the plugin to your plugins directory, activate it and view it in action i
 
 Wonder at its astonishing beauty.
 
-![Upload Permissions](http://i.imgur.com/XZmvOE3.png)
+![Upload Permissions](http://i.imgur.com/QXhOxV3.png)
+
 
 #### Changelog
 
