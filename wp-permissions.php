@@ -33,7 +33,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.3";
+    $version = "v0.4";
     $upload_dir =  wp_upload_dir();
     $uploadpath = $upload_dir['basedir'];
     $subdirpath = basename(realpath($uploadpath));
