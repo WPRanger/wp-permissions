@@ -22,6 +22,7 @@ Wonder at its astonishing beauty.
 * _[v0.1]_ Initial release
 * _[v0.2]_ Prettify the output.  A table!  Colours!
 * _[v.03]_ Now incorprates jQuery DataTables for pagination, filtering and sorting.
+* _[v0.4]_ Moved to FileInfo for MIME type checking
 
 __Dave Naylor__
 [WPRanger](http://wpranger.co.uk)
