@@ -1,6 +1,43 @@
 /* WordPress Uploads Permissions Stylesheet */
 /* Introduced in v0.3                       */ 
 
+#wp-permissions_next,
+#wp-permissions_previous {
+	margin: 20px 5px;
+	background: #ddd;
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+#wp-permissions_wrapper {
+	width: 90%;
+}
+#wp-permissions {
+	width: 100%;
+	clear: both;
+	
+}
+#wp-permissions_length {
+	float: right;
+	margin: 0 20px 10px 0; 
+}
+
+#wp-permissions_filter {
+	float: left;
+	margin: 0 0 20px 5px;
+}
+#wp-permissions_paginate,
+#wp-permissions_info
+ {
+	margin: 20px 0 10px 10px;
+}
+
+#wp-permissions_info {
+	font-weight: bold;
+}
+
+
+
 th {
 	text-align: center; background: #ccc;
 }
