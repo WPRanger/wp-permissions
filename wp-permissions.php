@@ -4,7 +4,7 @@ Plugin Name: WordPress Upload Permissions
 Plugin URI: http://wpranger.co.uk
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
-Version: 0.3
+Version: 0.4
 Author URI: http://wpranger.co.uk
 License: GPL2
 */
