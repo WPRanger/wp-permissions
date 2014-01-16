@@ -4,10 +4,10 @@ WordPress Upload Permissions
 ### Display file permissions of a WordPress uploads directory tree.
 
 This simple little plugin examines a WordPress uploads directory and displays all the directory
-permissions in octal notation. 
+and file permissions in octal notation. 
 
 I put it together with the intention of helping lost souls in the wordpress.org forums who are struggling
-to upload media due to incorrect file permissions. 
+to upload media due to incorrect file permissions.  Using this plugin will aid debugging. 
 
 #### Install
 
@@ -21,6 +21,7 @@ Wonder at its astonishing beauty.
 
 * _[v0.1]_ Initial release
 * _[v0.2]_ Prettify the output.  A table!  Colours!
+* _[v.03]_ Now incorprates jQuery DataTables for pagination, filtering and sorting.
 
 __Dave Naylor__
 [WPRanger](http://wpranger.co.uk)
