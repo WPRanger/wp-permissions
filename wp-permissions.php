@@ -140,9 +140,10 @@ function getFileList($dir, $recurse=false, $depth=false) {
         } 
 
         elseif(is_readable("$dir$entry")) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $retval[] = array(
                 "name" => "$dir$entry",
-                "type" => mime_content_type("$dir$entry"),
+                "type" => finfo_file($finfo, $dir.$entry),
                 "fperm" => decoct(fileperms("$dir$entry") & 0777),
                 "write" => "<td></td>",
                 "read" => "<td></td>"
