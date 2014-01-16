@@ -10,7 +10,7 @@
 }
 
 #wp-permissions_wrapper {
-	width: 90%;
+	max-width: 90%;
 }
 #wp-permissions {
 	width: 100%;
@@ -19,12 +19,12 @@
 }
 #wp-permissions_length {
 	float: right;
-	margin: 0 20px 10px 0; 
+	margin: 20px 20px 10px 0; 
 }
 
 #wp-permissions_filter {
 	float: left;
-	margin: 0 0 20px 5px;
+	margin: 20px 0 20px 5px;
 }
 #wp-permissions_paginate,
 #wp-permissions_info
@@ -35,9 +35,6 @@
 #wp-permissions_info {
 	font-weight: bold;
 }
-
-
-
 th {
 	text-align: center; background: #ccc;
 }
@@ -58,23 +55,30 @@ th {
 td.directory {
 	color: green;
 }
-
+td.tick {
+    background: url(../img/tick.png) no-repeat center #E0F8E0;
+    color: #E0F8E0;
+    text-align: left;
+}
+td.cross {
+    background:  url('../img/cross.png') no-repeat center #F78181;
+    color: #F78181;
+    text-align: left;
+}
+td.warn {
+    background: red;
+    color: #ffffff;
+    font-weight: bold;
+}
 td.file {
 	color: blue;
 }
-
-td.warn {
-	background: salmon;
+td {
+    text-align: center;
 }
-
-td.sweet {
-	background: lightgreen;
+td.name {
+    text-align: left;
 }
-
-td.boom {
-	background: orangered;text-align: center; color: #FFF;font-weight: bold;
-}
-
 tr:hover {
 	background: #ffffee;
 }

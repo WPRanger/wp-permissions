@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: WordPress Upload Permissions
-Plugin URI: http://wpranger.co.uk
+Plugin Name: WP Upload Permissions
+Plugin URI: http://wpranger.co.uk/wp-permissions
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
-Version: 0.4
+Version: 0.5
 Author URI: http://wpranger.co.uk
 License: GPL2
 */
@@ -49,15 +49,21 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.4";
+    $version = "v0.5";
     $upload_dir =  wp_upload_dir();
     $uploadpath = $upload_dir['basedir'];
     $subdirpath = basename(realpath($uploadpath));
 
 	echo "<div class='wrap'>"; 
-	echo "<h2>WordPress Upload Permissions</h2>";
+	echo "<h2>WP Upload Permissions</h2>";
     echo "<h3>Current permissions for your WordPress uploads directory</h3>";
     echo "<p><strong>Absolute upload path is set to: </strong>{$uploadpath}</p>";
+    echo "<ul>";
+    echo "<li>Any text can be filtered.  Search <strong><em>no</em></strong> for problems, <strong><em>yes</em></strong> for satisfaction</li>";
+    echo "<li>World writeable directories get a scary red background</li>";
+    echo "<li>Clicking the table headers sorts them</li>";
+    echo "</ul>";
+    echo "Current php process owner: " . get_current_user();
  	echo "</div>";
     
     ?>
@@ -73,21 +79,21 @@ function wp_permissions_tools_page() {
     // Grab the files and directories
     $dirlist = getFileList($uploadpath, true);
 
-    $uperm   = perm_the_dir("$uploadpath");
-    $uwtest  = write_the_dir("$uploadpath");
-    $urtest  = read_the_dir("$uploadpath");
-
-    
+    $uperm   = perm_the_obj("$uploadpath");
+    $uwtest  = write_the_obj("$uploadpath");
+    $urtest  = read_the_obj("$uploadpath");
      
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
-    echo "<thead><th class='left'>Name</th><th class='left'>Type</th><th>Permissions</th><th>Writeable</th><th>Readable</th></thead>\n";
+    echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Writeable</th><th>Readable</th></thead>\n";
     
     // Top table row hard coded to uploads basedir 
     echo "<tr>";
-    echo "<td class='directory'>{$subdirpath}</td>";
+    echo "<td class='directory name'>{$subdirpath}</td>";
     echo "<td >dir</td>";
     echo "<td>{$uperm}</td>";
+    echo "<td></td>";
+    echo "<td></td>";
     echo "{$uwtest}";
     echo "{$urtest}";
     echo "</tr>";
@@ -98,11 +104,18 @@ function wp_permissions_tools_page() {
         $uppath = substr($file['name'],$findme);
 
         if($file['type'] == "dir") {
-        echo "<td class='directory'>{$uppath}</td>\n";
-        } else { echo "<td class='file'>{$uppath}</td>\n";
+        echo "<td class='directory name'>{$uppath}</td>\n";
+        } else { echo "<td class='file name'>{$uppath}</td>\n";
         }
         echo "<td>{$file['type']}</td>\n";
-        echo "<td>{$file['fperm']}</td>\n";
+        $yikes = substr($file['fperm'], 2, 1);
+        if($yikes == 7) {
+            echo "<td class='warn'>{$file['fperm']}</td>\n";
+        } else {
+            echo "<td>{$file['fperm']}</td>\n";
+        }
+        echo "<td>{$file['fown']}</td>\n";
+        echo "<td>{$file['gown']}</td>\n";
         echo "{$file['write']}\n";
         echo "{$file['read']}\n";
         echo "</tr>\n";
@@ -110,16 +123,13 @@ function wp_permissions_tools_page() {
     echo "</table>\n\n";
     
     echo "<div class='creds-wrap'>\n";
-    echo "<small>Wordpress Upload Permissions {$version}</small><br />";
+    echo "<small>WP Upload Permissions {$version}</small><br />";
     echo "<small><a href='http://wpranger.co.uk'>WPRanger</a>\n";
     echo "</div>";
-
-
 }
 
-
 // The meat in the sausage.
-// Original PHP code by Chirp Internet: www.chirp.com.au
+// Some original PHP code by Chirp Internet: www.chirp.com.au
 function getFileList($dir, $recurse=false, $depth=false) {
     
     // array to hold return value
@@ -136,13 +146,17 @@ function getFileList($dir, $recurse=false, $depth=false) {
     // skip hidden files
     if($entry[0] == ".") continue;
         if(is_dir("$dir$entry")) {
-            $rtest = read_the_dir("$dir$entry");
-            $wtest = write_the_dir("$dir$entry");
-            $fptest = perm_the_dir("$dir$entry");
+            $rtest = read_the_obj("$dir$entry");
+            $wtest = write_the_obj("$dir$entry");
+            $fptest = perm_the_obj("$dir$entry");
+            $owtest = own_the_obj("dir$entry");
+            $grtest = group_the_obj("$dir$entry");
             $retval[] = array(
                 "name" => "$dir$entry/",
                 "type" => filetype("$dir$entry"),
                 "fperm" => "$fptest",
+                "fown" => "$owtest",
+                "gown" => "$grtest",
                 "write" => "$wtest",
                 "read" => "$rtest"
             );
@@ -165,9 +179,11 @@ function getFileList($dir, $recurse=false, $depth=false) {
             $retval[] = array(
                 "name" => "$dir$entry",
                 "type" => $ftype,
-                "fperm" => decoct(fileperms("$dir$entry") & 0777),
-                "write" => "<td></td>",
-                "read" => "<td></td>"
+                "fperm" => perm_the_obj("$dir$entry"),
+                "fown" =>  own_the_obj("$dir$entry"),
+                "gown" => group_the_obj("$dir$entry"),
+                "write" => write_the_obj("$dir$entry"),
+                "read" =>  read_the_obj("$dir$entry")
             );
         }
     }
@@ -176,38 +192,74 @@ function getFileList($dir, $recurse=false, $depth=false) {
     return $retval;
 }
 
-function read_the_dir($readthing) {
+function read_the_obj($readthing) {
 
-    $numero = substr(perm_the_dir("$readthing"), 0, 1);
+    $numero = substr(perm_the_obj("$readthing"), 0, 1);
 
-    if($numero != 7) {
-    $readres = "<td class='warn'>Directory is <strong>NOT</strong> readable</td>";
+    if(is_dir($readthing)) {
+        
+        if($numero != 7) {
+        $readres = "<td class='cross'>no</td>";
+        } else {
+        $readres = "<td class='tick'>yes</td>";
+        }
+
+        return $readres;
     } else {
-    $readres = "<td class='sweet'>Directory is readable</td>";
-    }
 
-    return $readres;
+        if($numero >= 4) {
+        $readres = "<td class='tick'>yes</td>";
+        } else {
+        $readres = "<td class='cross'>no<td>";
+        }
+        return $readres;
+    }
 }
 
-function write_the_dir($writething) {
+function write_the_obj($writething) {
 
-    $yikes = perm_the_dir($writething);
+        if(is_dir($writething)) {
+            if(is_writeable("$writething")) {
+            $writeres = "<td class='tick'>yes</td>";
+            } else {
+            $writeres = "<td class='cross'>no</td>";
+            }
 
-    if($yikes == 777) {
-        return "<td class='boom'>**WARNING** World Writeable</td>";
-    }
-    if(is_writeable("$writething")) {
-    $writeres = "<td class='sweet'>Directory is writeable</td>";
-    } else {
-    $writeres = "<td class='warn'>Directory is <strong>NOT</strong> writeable</td>";
-    }
+            return $writeres;
 
-    return $writeres;
+        } else {
+            if(is_writeable("$writething")) {
+            $writeres = "<td class='tick'>yes</td>";
+            } else {
+            $writeres = "<td class='cross'>no</td>";
+            }
+            return $writeres;
+        }
 }
 
-function perm_the_dir($permthing) {
+function perm_the_obj($permthing) {
 
     $permres = decoct(fileperms("$permthing") & 0777);
 
     return $permres;
+}
+function own_the_obj($ownthing) {
+
+    if(function_exists(posix_getpwuid)) {
+        $fotest = posix_getpwuid(fileowner("$ownthing"));
+        return $fotest[name];
+    } else {
+        return "N/A";
+    }
+
+}
+function group_the_obj($groupthing) {
+
+    if(function_exists(posix_getgrgid)) {
+        $gotest = posix_getgrgid(filegroup("$groupthing"));
+        return $gotest[name];
+    } else {
+        return "N/A";
+    }
+
 }
