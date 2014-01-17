@@ -50,10 +50,18 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 function wp_permissions_tools_page() {
     
     $version = "v0.6";
+
+    // find WordPress uploads directory absolute path
     $upload_dir =  wp_upload_dir();
     $uploadpath = $upload_dir['basedir'];
     $subdirpath = basename(realpath($uploadpath));
-    $processowner = @posix_getpwuid(@posix_geteuid());
+
+    // grabs process owner on *nix servers
+    if(function_exists(posix_getpwuid)) {
+        $processowner = @posix_getpwuid(@posix_geteuid());
+    } else {
+        $processowner = "Not known";
+    }
 
 	echo "<div class='wrap'>"; 
 	echo "<h2>WP Upload Permissions</h2>";
@@ -68,6 +76,7 @@ function wp_permissions_tools_page() {
  	echo "</div>";
     
     ?>
+    <!-- datatables settings -->
     <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery('#wp-permissions').dataTable( {
@@ -75,6 +84,8 @@ function wp_permissions_tools_page() {
         } );
     } );
     </script>
+    <!-- end datatables settings -->
+
     <p>
     <form method="post" action="<?=$_SERVER['PHP_SELF']?>?page=wp_permissions">
     <select name="bops">
@@ -85,16 +96,18 @@ function wp_permissions_tools_page() {
     <input type="submit" name="submit" value="Submit" />
     </form>
     </p>
+
     <?php
 
-    // Grab the files and directories
+    // grab the directories and optionally the files
     $dirlist = getFileList($uploadpath, true);
 
-    $uperm   = perm_the_obj("$uploadpath");
-    $uwtest  = write_the_obj("$uploadpath");
-    $urtest  = read_the_obj("$uploadpath");
-    $upown   = own_the_obj("$uploadpath");
-    $grown   = group_the_obj("$uploadpath"); 
+    // gets info for uploads root dir itself
+    $uploads_perms  = perm_the_obj("$uploadpath");
+    $uploads_write  = write_the_obj("$uploadpath");
+    $uploads_read   = read_the_obj("$uploadpath");
+    $uploads_owner  = own_the_obj("$uploadpath");
+    $uploads_group  = group_the_obj("$uploadpath"); 
 
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
@@ -104,31 +117,35 @@ function wp_permissions_tools_page() {
     echo "<tr>";
     echo "<td class='directory name'>{$subdirpath}/</td>";
     echo "<td >dir</td>";
-    echo "<td>{$uperm}</td>";
-    echo "<td>{$upown}</td>";
-    echo "<td>{$grown}</td>";
-    echo "{$uwtest}";
-    echo "{$urtest}";
+    echo "<td>{$uploads_perms}</td>";
+    echo "<td>{$uploads_owner}</td>";
+    echo "<td>{$uploads_group}</td>";
+    echo "{$uploads_write}";
+    echo "{$uploads_read}";
     echo "</tr>";
-     
+
+    // the big spangly table is rendered here 
     foreach($dirlist as $file) {
         echo "<tr>\n";
         $findme = stripos($file['name'], $subdirpath);
-        $uppath = substr($file['name'],$findme);
+        $uploads_path = substr($file['name'],$findme);
 
         if($file['type'] == "dir") {
-        echo "<td class='directory name'>{$uppath}</td>\n";
-        } else { echo "<td class='file name'>{$uppath}</td>\n";
+        echo "<td class='directory name'>{$uploads_path}</td>\n";
+        } else { echo "<td class='file name'>{$uploads_path}</td>\n";
         }
         echo "<td>{$file['type']}</td>\n";
-        $yikes = substr($file['fperm'], 2, 1);
+
+        // Red background if world writeable
+        $yikes = substr($file['f_perm'], 2, 1);
         if($yikes == 7) {
-            echo "<td class='warn'>{$file['fperm']}</td>\n";
+            echo "<td class='warn'>{$file['f_perm']}</td>\n";
         } else {
-            echo "<td>{$file['fperm']}</td>\n";
+            echo "<td>{$file['f_perm']}</td>\n";
         }
-        echo "<td>{$file['fown']}</td>\n";
-        echo "<td>{$file['gown']}</td>\n";
+        
+        echo "<td>{$file['f_own']}</td>\n";
+        echo "<td>{$file['g_own']}</td>\n";
         echo "{$file['write']}\n";
         echo "{$file['read']}\n";
         echo "</tr>\n";
@@ -141,10 +158,9 @@ function wp_permissions_tools_page() {
     echo "</div>";
 }
 
-// The meat in the sausage.
-// Some original PHP code by Chirp Internet: www.chirp.com.au
+// the meat in the sausage, this is what gets all the dirs and files
+// some original PHP code by Chirp Internet: www.chirp.com.au
 function getFileList($dir, $recurse=false, $depth=false) {
-    
     
     // array to hold return value
     $retval = array();
@@ -160,19 +176,14 @@ function getFileList($dir, $recurse=false, $depth=false) {
     // skip hidden files
     if($entry[0] == ".") continue;
         if(is_dir("$dir$entry")) {
-            $rtest = read_the_obj("$dir$entry");
-            $wtest = write_the_obj("$dir$entry");
-            $fptest = perm_the_obj("$dir$entry");
-            $owtest = own_the_obj("$dir$entry/");
-            $grtest = group_the_obj("$dir$entry/");
             $retval[] = array(
-                "name" => "$dir$entry/",
-                "type" => filetype("$dir$entry"),
-                "fperm" => "$fptest",
-                "fown" => $owtest,
-                "gown" => "$grtest",
-                "write" => "$wtest",
-                "read" => "$rtest"
+                "name"   => "$dir$entry/",
+                "type"   => filetype("$dir$entry"),
+                "f_perm" => perm_the_obj("$dir$entry"),
+                "f_own"  => own_the_obj("$dir$entry/"),
+                "g_own"  => group_the_obj("$dir$entry/"),
+                "write"  => write_the_obj("$dir$entry"),
+                "read"   => read_the_obj("$dir$entry")
             );
             if($recurse && is_readable("$dir$entry/")) {
                 if($depth === false) {
@@ -184,6 +195,8 @@ function getFileList($dir, $recurse=false, $depth=false) {
         } 
 
         elseif(is_readable("$dir$entry") && $_POST["bops"] == "BOTH")  {
+
+            // if fileinfo is available, use it, if not, call it a file
             if(function_exists(finfo_open)) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $ftype = finfo_file($finfo, $dir.$entry);
@@ -191,13 +204,13 @@ function getFileList($dir, $recurse=false, $depth=false) {
                     $ftype = "file";
             }
             $retval[] = array(
-                "name" => "$dir$entry",
-                "type" => $ftype,
-                "fperm" => perm_the_obj("$dir$entry"),
-                "fown" =>  own_the_obj("$dir$entry"),
-                "gown" => group_the_obj("$dir$entry"),
-                "write" => write_the_obj("$dir$entry"),
-                "read" =>  read_the_obj("$dir$entry")
+                "name"   => "$dir$entry",
+                "type"   => $ftype,
+                "f_perm" => perm_the_obj("$dir$entry"),
+                "f_own"  => own_the_obj("$dir$entry"),
+                "g_own"  => group_the_obj("$dir$entry"),
+                "write"  => write_the_obj("$dir$entry"),
+                "read"   => read_the_obj("$dir$entry")
             );
         }
     }
@@ -205,7 +218,7 @@ function getFileList($dir, $recurse=false, $depth=false) {
 
     return $retval;
 }
-
+// functions to grab the info
 function read_the_obj($readthing) {
 
     $numero = substr(perm_the_obj("$readthing"), 0, 1);
@@ -259,7 +272,7 @@ function perm_the_obj($permthing) {
 }
 function own_the_obj($ownthing) {
     if(function_exists(posix_getpwuid)) {
-        $fotest = posix_getpwuid(fileowner("$ownthing"));
+        $fotest = @posix_getpwuid(fileowner("$ownthing"));
         return $fotest[name];
     } else {
         return "N/A";
@@ -268,7 +281,7 @@ function own_the_obj($ownthing) {
 function group_the_obj($groupthing) {
 
     if(function_exists(posix_getgrgid)) {
-        $gotest = posix_getgrgid(filegroup("$groupthing"));
+        $gotest = @posix_getgrgid(filegroup("$groupthing"));
         return $gotest[name];
     } else {
         return "N/A";
