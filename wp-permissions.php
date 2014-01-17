@@ -53,6 +53,7 @@ function wp_permissions_tools_page() {
     $upload_dir =  wp_upload_dir();
     $uploadpath = $upload_dir['basedir'];
     $subdirpath = basename(realpath($uploadpath));
+    $processowner = @posix_getpwuid(@posix_geteuid());
 
 	echo "<div class='wrap'>"; 
 	echo "<h2>WP Upload Permissions</h2>";
@@ -63,7 +64,7 @@ function wp_permissions_tools_page() {
     echo "<li>World writeable directories get a scary red background</li>";
     echo "<li>Clicking the table headers sorts them</li>";
     echo "</ul>";
-    echo "Current php process owner: " . get_current_user();
+    echo "Current php process owner: " . $processowner['name'];
  	echo "</div>";
     
     ?>
@@ -247,7 +248,7 @@ function perm_the_obj($permthing) {
 }
 function own_the_obj($ownthing) {
     if(function_exists(posix_getpwuid)) {
-        $fotest = @posix_getpwuid(fileowner("$ownthing"));
+        $fotest = posix_getpwuid(fileowner("$ownthing"));
         return $fotest[name];
     } else {
         return "N/A";
@@ -256,7 +257,7 @@ function own_the_obj($ownthing) {
 function group_the_obj($groupthing) {
 
     if(function_exists(posix_getgrgid)) {
-        $gotest = @posix_getgrgid(filegroup("$groupthing"));
+        $gotest = posix_getgrgid(filegroup("$groupthing"));
         return $gotest[name];
     } else {
         return "N/A";
