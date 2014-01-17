@@ -4,7 +4,7 @@ Plugin Name: WP Upload Permissions
 Plugin URI: http://wpranger.co.uk/wp-permissions
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
-Version: 0.5
+Version: 0.6
 Author URI: http://wpranger.co.uk
 License: GPL2
 */
@@ -49,7 +49,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.5";
+    $version = "v0.6";
     $upload_dir =  wp_upload_dir();
     $uploadpath = $upload_dir['basedir'];
     $subdirpath = basename(realpath($uploadpath));
@@ -58,13 +58,13 @@ function wp_permissions_tools_page() {
 	echo "<div class='wrap'>"; 
 	echo "<h2>WP Upload Permissions</h2>";
     echo "<h3>Current permissions for your WordPress uploads directory</h3>";
-    echo "<p><strong>Absolute upload path is set to: </strong>{$uploadpath}</p>";
     echo "<ul>";
     echo "<li>Any text can be filtered.  Search <strong><em>no</em></strong> for problems, <strong><em>yes</em></strong> for satisfaction</li>";
     echo "<li>World writeable directories get a scary red background</li>";
     echo "<li>Clicking the table headers sorts them</li>";
     echo "</ul>";
-    echo "Current php process owner: " . $processowner['name'];
+    echo "<strong>Current php process owner:</strong> " . $processowner['name'];
+    echo "<p><strong>Absolute upload path set to: </strong>{$uploadpath}</p>";
  	echo "</div>";
     
     ?>
@@ -75,8 +75,18 @@ function wp_permissions_tools_page() {
         } );
     } );
     </script>
+    <p>
+    <form method="post" action="<?=$_SERVER['PHP_SELF']?>?page=wp_permissions">
+    <select name="bops">
+      <option value="NONE">Select Search Type</option>
+      <option value="DIRS">Just Directories</option>
+      <option value="BOTH">Directories and Files</option>
+    </select>
+    <input type="submit" name="submit" value="Submit" />
+    </form>
+    </p>
     <?php
-    
+
     // Grab the files and directories
     $dirlist = getFileList($uploadpath, true);
 
@@ -135,6 +145,7 @@ function wp_permissions_tools_page() {
 // Some original PHP code by Chirp Internet: www.chirp.com.au
 function getFileList($dir, $recurse=false, $depth=false) {
     
+    
     // array to hold return value
     $retval = array();
 
@@ -172,7 +183,7 @@ function getFileList($dir, $recurse=false, $depth=false) {
             }
         } 
 
-        elseif(is_readable("$dir$entry")) {
+        elseif(is_readable("$dir$entry") && $_POST["bops"] == "BOTH")  {
             if(function_exists(finfo_open)) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $ftype = finfo_file($finfo, $dir.$entry);
@@ -263,3 +274,4 @@ function group_the_obj($groupthing) {
         return "N/A";
     }
 }
+

@@ -25,5 +25,8 @@ Wonder at its astonishing beauty.
 * _[v.03]_ Now incorprates jQuery DataTables for pagination, filtering and sorting.
 * _[v0.4]_ Moved to FileInfo for MIME type checking.
 * _[v0.5]_ Added owner/group details, included icons.  Changed name to WP Upload Permissions.
+* _[v0.6]_ Added ability to select Just Directories, or both Directories and Files* _[v0.6]_ Added ability to select Just Directories, or both Directories and Files
+
 __Dave Naylor__
+
 [WPRanger](http://wpranger.co.uk)
