@@ -63,8 +63,8 @@ function wp_permissions_tools_page() {
         $processowner = "Not known";
     }
 
-	echo "<div class='wrap'>"; 
-	echo "<h2>WP Upload Permissions</h2>";
+    echo "<div class='wrap'>"; 
+    echo "<h2>WP Upload Permissions</h2>";
     echo "<h3>Current permissions for your WordPress uploads directory</h3>";
     echo "<ul>";
     echo "<li>Any text can be filtered.  Search <strong><em>no</em></strong> for problems, <strong><em>yes</em></strong> for satisfaction</li>";
@@ -73,8 +73,8 @@ function wp_permissions_tools_page() {
     echo "</ul>";
     echo "<strong>Current php process owner:</strong> " . $processowner['name'];
     echo "<p><strong>Absolute upload path set to: </strong>{$uploadpath}</p>";
- 	echo "</div>";
-    
+    echo "</div>";
+
     ?>
     <!-- datatables settings -->
     <script type="text/javascript">
