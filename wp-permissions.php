@@ -247,7 +247,7 @@ function perm_the_obj($permthing) {
 }
 function own_the_obj($ownthing) {
     if(function_exists(posix_getpwuid)) {
-        $fotest = posix_getpwuid(fileowner("$ownthing"));
+        $fotest = @posix_getpwuid(fileowner("$ownthing"));
         return $fotest[name];
     } else {
         return "N/A";
@@ -256,7 +256,7 @@ function own_the_obj($ownthing) {
 function group_the_obj($groupthing) {
 
     if(function_exists(posix_getgrgid)) {
-        $gotest = posix_getgrgid(filegroup("$groupthing"));
+        $gotest = @posix_getgrgid(filegroup("$groupthing"));
         return $gotest[name];
     } else {
         return "N/A";
