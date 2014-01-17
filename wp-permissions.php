@@ -89,7 +89,7 @@ function wp_permissions_tools_page() {
     <p>
     <form method="post" action="<?=$_SERVER['PHP_SELF']?>?page=wp_permissions">
     <select name="bops">
-      <option value="NONE">Select Search Type</option>
+      <option value="NONE">Select List Type</option>
       <option value="DIRS">Just Directories</option>
       <option value="BOTH">Directories and Files</option>
     </select>
