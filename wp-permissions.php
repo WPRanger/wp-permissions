@@ -82,18 +82,20 @@ function wp_permissions_tools_page() {
     $uperm   = perm_the_obj("$uploadpath");
     $uwtest  = write_the_obj("$uploadpath");
     $urtest  = read_the_obj("$uploadpath");
-     
+    $upown   = own_the_obj("$uploadpath");
+    $grown   = group_the_obj("$uploadpath"); 
+
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
     echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Writeable</th><th>Readable</th></thead>\n";
     
     // Top table row hard coded to uploads basedir 
     echo "<tr>";
-    echo "<td class='directory name'>{$subdirpath}</td>";
+    echo "<td class='directory name'>{$subdirpath}/</td>";
     echo "<td >dir</td>";
     echo "<td>{$uperm}</td>";
-    echo "<td></td>";
-    echo "<td></td>";
+    echo "<td>{$upown}</td>";
+    echo "<td>{$grown}</td>";
     echo "{$uwtest}";
     echo "{$urtest}";
     echo "</tr>";
@@ -149,13 +151,13 @@ function getFileList($dir, $recurse=false, $depth=false) {
             $rtest = read_the_obj("$dir$entry");
             $wtest = write_the_obj("$dir$entry");
             $fptest = perm_the_obj("$dir$entry");
-            $owtest = own_the_obj("dir$entry");
-            $grtest = group_the_obj("$dir$entry");
+            $owtest = own_the_obj("$dir$entry/");
+            $grtest = group_the_obj("$dir$entry/");
             $retval[] = array(
                 "name" => "$dir$entry/",
                 "type" => filetype("$dir$entry"),
                 "fperm" => "$fptest",
-                "fown" => "$owtest",
+                "fown" => $owtest,
                 "gown" => "$grtest",
                 "write" => "$wtest",
                 "read" => "$rtest"
@@ -244,22 +246,19 @@ function perm_the_obj($permthing) {
     return $permres;
 }
 function own_the_obj($ownthing) {
-
     if(function_exists(posix_getpwuid)) {
-        $fotest = @posix_getpwuid(fileowner("$ownthing"));
+        $fotest = posix_getpwuid(fileowner("$ownthing"));
         return $fotest[name];
     } else {
         return "N/A";
     }
-
 }
 function group_the_obj($groupthing) {
 
     if(function_exists(posix_getgrgid)) {
-        $gotest = @posix_getgrgid(filegroup("$groupthing"));
+        $gotest = posix_getgrgid(filegroup("$groupthing"));
         return $gotest[name];
     } else {
         return "N/A";
     }
-
 }
