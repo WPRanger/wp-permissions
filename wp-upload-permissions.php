@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Upload Permissions
-Plugin URI: http://wpranger.co.uk/wp-permissions
+Plugin URI: http://wpranger.co.uk/plugins/wp-upload-permissions
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
 Version: 0.6
@@ -111,11 +111,11 @@ function wp_permissions_tools_page() {
 
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
-    echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Writeable</th><th>Readable</th></thead>\n";
+    echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Write</th><th>Read</th></thead>\n";
     
     // Top table row hard coded to uploads basedir 
     echo "<tr>";
-    echo "<td class='directory name'>{$subdirpath}/</td>";
+    echo "<td class='directory left'>{$subdirpath}/</td>";
     echo "<td >dir</td>";
     echo "<td>{$uploads_perms}</td>";
     echo "<td>{$uploads_owner}</td>";
@@ -131,8 +131,8 @@ function wp_permissions_tools_page() {
         $uploads_path = substr($file['name'],$findme);
 
         if($file['type'] == "dir") {
-        echo "<td class='directory name'>{$uploads_path}</td>\n";
-        } else { echo "<td class='file name'>{$uploads_path}</td>\n";
+        echo "<td class='directory left'>{$uploads_path}</td>\n";
+        } else { echo "<td class='file left'>{$uploads_path}</td>\n";
         }
         echo "<td>{$file['type']}</td>\n";
 
