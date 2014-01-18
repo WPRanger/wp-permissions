@@ -20,13 +20,13 @@ Wonder at its astonishing beauty.
 
 #### Changelog
 
-* _[v0.1.0]_ Initial release
-* _[v0.2.0]_ Prettify the output.  A table!  Colours!
-* _[v0.3.0]_ Now incorprates jQuery DataTables for pagination, filtering and sorting.
-* _[v0.4.0]_ Moved to FileInfo for MIME type checking.
-* _[v0.5.0]_ Added owner/group details, included icons.  Changed name to WP Upload Permissions.
-* _[v0.6.0]_ Added ability to select Just Directories, or both Directories and Files
 * _[v0.6.1]_ Added default DataTables CSS rules + images.  Renamed some table headers
+* _[v0.6.0]_ Added ability to select Just Directories, or both Directories and Files
+* _[v0.5.0]_ Added owner/group details, included icons.  Changed name to WP Upload Permissions.
+* _[v0.4.0]_ Moved to FileInfo for MIME type checking.
+* _[v0.3.0]_ Now incorprates jQuery DataTables for pagination, filtering and sorting.
+* _[v0.2.0]_ Prettify the output.  A table!  Colours!
+* _[v0.1.0]_ Initial release
 
 __Dave Naylor__
 
