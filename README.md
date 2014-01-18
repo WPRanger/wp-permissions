@@ -27,6 +27,7 @@ Wonder at its astonishing beauty.
 * _[v0.5.0]_ Added owner/group details, included icons.  Changed name to WP Upload Permissions.
 * _[v0.6.0]_ Added ability to select Just Directories, or both Directories and Files
 * _[v0.6.1]_ Added default DataTables CSS rules + images.  Renamed some table headers
+
 __Dave Naylor__
 
 [WPRanger](http://wpranger.co.uk)
