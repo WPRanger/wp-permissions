@@ -42,6 +42,8 @@ function wp_permissions_scripts($hook) {
     }
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'jquery.dataTables', plugins_url( 'js/jquery.dataTables.min.js', __FILE__), array(), '1.0.0', true );
+    wp_enqueue_script( 'jquery.TablesTools', plugins_url( 'js/TableTools.min.js', __FILE__), array(), '1.0.0', true );
+    wp_enqueue_script( 'jquery.ZeroClipboard', plugins_url( 'js/ZeroClipboard.js', __FILE__), array(), '1.0.0', true );
     wp_register_style( 'wp_permissions', plugins_url( 'css/style.css', __FILE__));
     wp_enqueue_style( 'wp_permissions' );
 }
@@ -49,7 +51,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.6";
+    $version = "v0.6.2";
 
     // find WordPress uploads directory absolute path
     $upload_dir =  wp_upload_dir();
@@ -75,12 +77,21 @@ function wp_permissions_tools_page() {
     echo "<p><strong>Absolute upload path set to: </strong>{$uploadpath}</p>";
  	echo "</div>";
     
+    // datatables settings 
+    $swf_path = plugins_url( 'swf/copy_csv_xls_pdf.swf', __FILE__);
     ?>
-    <!-- datatables settings -->
     <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery('#wp-permissions').dataTable( {
-            "aaSorting": [[ 4, "desc" ]]
+            "aaSorting": [[ 4, "desc" ]],
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "sSwfPath": "<?php echo $swf_path; ?>"
+            },
+            "aoColumnDefs": [
+                        { "bVisible": false, "aTargets": [ 7 ] },
+                        { "bVisible": false, "aTargets": [ 8 ] }
+            ], 
         } );
     } );
     </script>
@@ -111,7 +122,7 @@ function wp_permissions_tools_page() {
 
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
-    echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Write</th><th>Read</th></thead>\n";
+    echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Write</th><th>Read</th><th>Moo</th><th>Boo</th></thead>\n";
     
     // Top table row hard coded to uploads basedir 
     echo "<tr>";
@@ -226,18 +237,18 @@ function read_the_obj($readthing) {
     if(is_dir($readthing)) {
         
         if($numero != 7) {
-        $readres = "<td class='cross'>no</td>";
+        $readres = "<td class='cross'></td><td class='cross'>no</td>";
         } else {
-        $readres = "<td class='tick'>yes</td>";
+        $readres = "<td class='tick'></td><td class='tick'>yes</td>";
         }
 
         return $readres;
     } else {
 
         if($numero >= 4) {
-        $readres = "<td class='tick'>yes</td>";
+        $readres = "<td class='tick'></td><td class='tick'>yes</td>";
         } else {
-        $readres = "<td class='cross'>no<td>";
+        $readres = "<td class='cross'><td><td class='cross'>no<td>";
         }
         return $readres;
     }
@@ -247,18 +258,18 @@ function write_the_obj($writething) {
 
         if(is_dir($writething)) {
             if(is_writeable("$writething")) {
-            $writeres = "<td class='tick'>yes</td>";
+            $writeres = "<td class='tick'></td><td class='tick'>yes</td>";
             } else {
-            $writeres = "<td class='cross'>no</td>";
+            $writeres = "<td class='cross'></td><td class='cross'>no</td>";
             }
 
             return $writeres;
 
         } else {
             if(is_writeable("$writething")) {
-            $writeres = "<td class='tick'>yes</td>";
+            $writeres = "<td class='tick'></td><td class='tick'>yes</td>";
             } else {
-            $writeres = "<td class='cross'>no</td>";
+            $writeres = "<td class='cross'></td><td class='cross'>no</td>";
             }
             return $writeres;
         }
