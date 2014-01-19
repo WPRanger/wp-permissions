@@ -51,7 +51,11 @@ I suspect it may not behave.
 * Nobody asked a question yet
 
 == Changelog ==
-= 0/7/1 =
+
+= 0.7.2 =
+* Typo fix
+
+= 0.7.1 =
 * Moved menu entry to media.  Probably a more logical place for it
 
 = 0.7.0

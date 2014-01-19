@@ -20,6 +20,7 @@ Wonder at its astonishing beauty.
 
 #### Changelog
 
+* _[v0.7.2]_ Typo fix
 * _[v0.7.1]_ Moved menu entry to Media.  Seems more logical
 * _[v0.7.0]_ Added TableTools to Datatables for CSV, Excel and PDF download
 * _[v0.6.2]_ Needed to add closing PHP statement due to update plugin
