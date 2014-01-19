@@ -51,7 +51,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.6.2";
+    $version = "v0.7.0";
 
     // find WordPress uploads directory absolute path
     $upload_dir =  wp_upload_dir();
@@ -89,7 +89,7 @@ function wp_permissions_tools_page() {
                 "sSwfPath": "<?php echo $swf_path; ?>"
             },
             "aoColumnDefs": [
-                        { "bVisible": false, "aTargets": [ 7 ] },
+                        { "bVisible": false, "aTargets": [ 6 ] },
                         { "bVisible": false, "aTargets": [ 8 ] }
             ], 
         } );
@@ -122,7 +122,16 @@ function wp_permissions_tools_page() {
 
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
-    echo "<thead><th class='left'>Name</th><th>Type</th><th>Permissions</th><th>Owner</th><th>Group</th><th>Write</th><th>Read</th><th>Moo</th><th>Boo</th></thead>\n";
+    echo "<thead><th class='left'>Name</th>
+        <th>Tupe</th>
+        <th>Permissions</th>
+        <th>Owner</th>
+        <th>Group</th>
+        <th>Write</th>
+        <th>Moo</th>
+        <th>Read</th>
+        <th>Boo</th>
+        </thead>\n";
     
     // Top table row hard coded to uploads basedir 
     echo "<tr>";
@@ -133,7 +142,7 @@ function wp_permissions_tools_page() {
     echo "<td>{$uploads_group}</td>";
     echo "{$uploads_write}";
     echo "{$uploads_read}";
-    echo "</tr>";
+    echo "</tr>\n";
 
     // the big spangly table is rendered here 
     foreach($dirlist as $file) {
@@ -166,7 +175,7 @@ function wp_permissions_tools_page() {
     echo "<div class='creds-wrap'>\n";
     echo "<small>WP Upload Permissions {$version}</small><br />";
     echo "<small><a href='http://wpranger.co.uk'>WPRanger</a>\n";
-    echo "</div>";
+    echo "</div>\n";
 }
 
 // the meat in the sausage, this is what gets all the dirs and files

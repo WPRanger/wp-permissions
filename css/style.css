@@ -266,13 +266,11 @@ table.dataTable thead td:active {
     background: url(../images/tick.png) no-repeat center;
     color: #E0F8E0;
     text-align: left;
-    width: 65px;
 }
 .cross {
     background:  url('../images/cross.png') no-repeat center #F78181;
     color: #F78181;
     text-align: left;
-    width: 65px;
 }
 .warn {
     background: red;
