@@ -123,7 +123,7 @@ function wp_permissions_tools_page() {
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
     echo "<thead><th class='left'>Name</th>
-        <th>Tupe</th>
+        <th>Type</th>
         <th>Permissions</th>
         <th>Owner</th>
         <th>Group</th>
