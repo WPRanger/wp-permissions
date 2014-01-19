@@ -11,7 +11,7 @@ to upload media due to incorrect file permissions.  Using this plugin will aid d
 
 #### Install
 
-Upload the plugin to your plugins directory, activate it and view it in action in your Dashboard Tools menu.
+Upload the plugin to your plugins directory, activate it and view it in action in your Dashboard Media menu.
 
 Wonder at its astonishing beauty.
 
@@ -20,6 +20,7 @@ Wonder at its astonishing beauty.
 
 #### Changelog
 
+* _[v0.7.1]_ Moved menu entry to Media.  Seems more logical
 * _[v0.7.0]_ Added TableTools to Datatables for CSV, Excel and PDF download
 * _[v0.6.2]_ Needed to add closing PHP statement due to update plugin
 * _[v0.6.1]_ Added default DataTables CSS rules + images.  Renamed some table headers

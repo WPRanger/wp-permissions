@@ -4,7 +4,7 @@ Plugin Name: WP Upload Permissions
 Plugin URI: http://wpranger.co.uk/plugins/wp-upload-permissions
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
-Version: 0.6.2
+Version: 0.7.1
 Author URI: http://wpranger.co.uk
 License: GPL2
 */
@@ -34,10 +34,10 @@ function wp_permissions_init(){
 add_action( 'admin_init', 'wp_permissions_init' );
 
 function wp_permissions_admin_menu() {
-    add_management_page('Upload Permissions', 'Upload Permissions', 'manage_options', 'wp_permissions', 'wp_permissions_tools_page');
+    add_media_page('Upload Permissions', 'Upload Permissions', 'manage_options', 'wp_permissions', 'wp_permissions_tools_page');
 }
 function wp_permissions_scripts($hook) {
-    if($hook != 'tools_page_wp_permissions')  {
+    if($hook != 'media_page_wp_permissions')  {
         return;
     }
     wp_enqueue_script( 'jquery' );
@@ -51,7 +51,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.7.0";
+    $version = "v0.7.1";
 
     // find WordPress uploads directory absolute path
     $upload_dir =  wp_upload_dir();
