@@ -51,6 +51,10 @@ I suspect it may not behave.
 * Nobody asked a question yet
 
 == Changelog ==
+
+= 0.7.0
+* Added TableTools to Datatables for download of tables
+
 = 0.6.2 =
 * Had to add closing PHP statement because of update plugin 
 

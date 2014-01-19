@@ -19,7 +19,8 @@ Wonder at its astonishing beauty.
 
 
 #### Changelog
-* _[v0.6.2}_ Needed to add closing PHP statement due to update plugin
+* _[v0.7.0]_ Added TableTools to Datatables for CSV, Excel and PDF download
+* _[v0.6.2]_ Needed to add closing PHP statement due to update plugin
 * _[v0.6.1]_ Added default DataTables CSS rules + images.  Renamed some table headers
 * _[v0.6.0]_ Added ability to select Just Directories, or both Directories and Files
 * _[v0.5.0]_ Added owner/group details, included icons.  Changed name to WP Upload Permissions.
