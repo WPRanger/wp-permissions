@@ -263,7 +263,7 @@ table.dataTable thead td:active {
 /* WP Uploads Permissions */
 
 .tick {
-    background: url(../images/tick.png) no-repeat center #E0F8E0;
+    background: url(../images/tick.png) no-repeat center;
     color: #E0F8E0;
     text-align: left;
     width: 65px;
