@@ -4,7 +4,7 @@ Plugin Name: WP Upload Permissions
 Plugin URI: http://wpranger.co.uk/plugins/wp-upload-permissions
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
-Version: 0.7.2
+Version: 0.7.1
 Author URI: http://wpranger.co.uk
 License: GPL2
 */
@@ -51,7 +51,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.7.2";
+    $version = "v0.7.1";
 
     // find WordPress uploads directory absolute path
     $upload_dir =  wp_upload_dir();
@@ -123,14 +123,14 @@ function wp_permissions_tools_page() {
     // Render the output table
     echo "<table class='wpr-table' id='wp-permissions'>\n";
     echo "<thead><th class='left'>Name</th>
-        <th>Type</th>
+        <th>Tupe</th>
         <th>Permissions</th>
         <th>Owner</th>
         <th>Group</th>
-        <th>Write</th>
-        <th>Moo</th>
         <th>Read</th>
         <th>Boo</th>
+        <th>Write</th>
+        <th>Moo</th>
         </thead>\n";
     
     // Top table row hard coded to uploads basedir 
@@ -140,8 +140,8 @@ function wp_permissions_tools_page() {
     echo "<td>{$uploads_perms}</td>";
     echo "<td>{$uploads_owner}</td>";
     echo "<td>{$uploads_group}</td>";
-    echo "{$uploads_write}";
     echo "{$uploads_read}";
+    echo "{$uploads_write}";
     echo "</tr>\n";
 
     // the big spangly table is rendered here 
@@ -166,8 +166,8 @@ function wp_permissions_tools_page() {
         
         echo "<td>{$file['f_own']}</td>\n";
         echo "<td>{$file['g_own']}</td>\n";
-        echo "{$file['write']}\n";
         echo "{$file['read']}\n";
+        echo "{$file['write']}\n";
         echo "</tr>\n";
     }
     echo "</table>\n\n";
@@ -202,8 +202,8 @@ function getFileList($dir, $recurse=false, $depth=false) {
                 "f_perm" => perm_the_obj("$dir$entry"),
                 "f_own"  => own_the_obj("$dir$entry/"),
                 "g_own"  => group_the_obj("$dir$entry/"),
-                "write"  => write_the_obj("$dir$entry"),
-                "read"   => read_the_obj("$dir$entry")
+                "read"   => read_the_obj("$dir$entry"),
+                "write"  => write_the_obj("$dir$entry")
             );
             if($recurse && is_readable("$dir$entry/")) {
                 if($depth === false) {
@@ -229,8 +229,8 @@ function getFileList($dir, $recurse=false, $depth=false) {
                 "f_perm" => perm_the_obj("$dir$entry"),
                 "f_own"  => own_the_obj("$dir$entry"),
                 "g_own"  => group_the_obj("$dir$entry"),
-                "write"  => write_the_obj("$dir$entry"),
-                "read"   => read_the_obj("$dir$entry")
+                "read"   => read_the_obj("$dir$entry"),
+                "write"  => write_the_obj("$dir$entry")
             );
         }
     }
@@ -241,20 +241,20 @@ function getFileList($dir, $recurse=false, $depth=false) {
 // functions to grab the info
 function read_the_obj($readthing) {
 
-    $numero = substr(perm_the_obj("$readthing"), 0, 1);
+    $numero = substr(perm_the_obj("$readthing"), 1, 2);
 
     if(is_dir($readthing)) {
         
-        if($numero != 7) {
-        $readres = "<td class='cross'></td><td class='cross'>no</td>";
-        } else {
+        if(is_readable($readthing)) {
         $readres = "<td class='tick'></td><td class='tick'>yes</td>";
+        } else {
+        $readres = "<td class='cross'></td><td class='cross'>no</td>";
         }
 
         return $readres;
     } else {
 
-        if($numero >= 4) {
+        if($numero >= 44) {
         $readres = "<td class='tick'></td><td class='tick'>yes</td>";
         } else {
         $readres = "<td class='cross'><td><td class='cross'>no<td>";

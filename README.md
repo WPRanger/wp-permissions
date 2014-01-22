@@ -20,6 +20,8 @@ Wonder at its astonishing beauty.
 
 #### Changelog
 
+* _[v0.7.3]_ Changed the order of the table headers to Read - Write
+             Check for is_readable improved
 * _[v0.7.2]_ Typo fix
 * _[v0.7.1]_ Moved menu entry to Media.  Seems more logical
 * _[v0.7.0]_ Added TableTools to Datatables for CSV, Excel and PDF download
