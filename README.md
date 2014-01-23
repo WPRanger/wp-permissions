@@ -20,6 +20,7 @@ Wonder at its astonishing beauty.
 
 #### Changelog
 
+* _[v0.7.4]_ No longer enqueues jQuery since it's already present 
 * _[v0.7.3]_ Changed the order of the table headers to Read - Write
              Check for is_readable improved
 * _[v0.7.2]_ Typo fix

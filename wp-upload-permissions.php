@@ -4,7 +4,7 @@ Plugin Name: WP Upload Permissions
 Plugin URI: http://wpranger.co.uk/plugins/wp-upload-permissions
 Description: Lists the currently set WordPress uploads directory permissions
 Author: Dave Naylor
-Version: 0.7.3
+Version: 0.7.4
 Author URI: http://wpranger.co.uk
 License: GPL2
 */
@@ -40,9 +40,9 @@ function wp_permissions_scripts($hook) {
     if($hook != 'media_page_wp_permissions')  {
         return;
     }
-    wp_enqueue_script( 'jquery' );
+    //wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'jquery.dataTables', plugins_url( 'js/jquery.dataTables.min.js', __FILE__), array(), '1.0.0', true );
-    wp_enqueue_script( 'jquery.TablesTools', plugins_url( 'js/TableTools.min.js', __FILE__), array(), '1.0.0', true );
+    wp_enqueue_script( 'jquery.TableTools', plugins_url( 'js/TableTools.min.js', __FILE__), array(), '1.0.0', true );
     wp_enqueue_script( 'jquery.ZeroClipboard', plugins_url( 'js/ZeroClipboard.js', __FILE__), array(), '1.0.0', true );
     wp_register_style( 'wp_permissions', plugins_url( 'css/style.css', __FILE__));
     wp_enqueue_style( 'wp_permissions' );
@@ -51,7 +51,7 @@ add_action( 'admin_enqueue_scripts', 'wp_permissions_scripts' );
 
 function wp_permissions_tools_page() {
     
-    $version = "v0.7.3";
+    $version = "v0.7.4";
 
     // find WordPress uploads directory absolute path
     $upload_dir =  wp_upload_dir();
@@ -85,7 +85,7 @@ function wp_permissions_tools_page() {
         jQuery('#wp-permissions').dataTable( {
             "aaSorting": [[ 4, "desc" ]],
             "sDom": 'T<"clear">lfrtip',
-            "oTableTools": {
+            "TableTools": {
                 "sSwfPath": "<?php echo $swf_path; ?>"
             },
             "aoColumnDefs": [

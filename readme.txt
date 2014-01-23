@@ -52,6 +52,9 @@ I suspect it may not behave.
 
 == Changelog ==
 
+= 0.7.4 =
+* No longer enqueues jQuery since it's already there.
+
 = 0.7.3 =
 * Changed the order of the table headers to Read - Write
 * Check for is_readable improved
