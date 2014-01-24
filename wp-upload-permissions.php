@@ -7,6 +7,8 @@ Author: Dave Naylor
 Version: 0.7.4
 Author URI: http://wpranger.co.uk
 License: GPL2
+GitHub Plugin URI: https://github.com/WPRanger/wp-upload-permissions
+GitHub Branch: master
 */
 
 /*  Copyright 2014  Dave Naylor  (email : dave@wpranger.co.uk)
