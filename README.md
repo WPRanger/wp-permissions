@@ -15,11 +15,14 @@ Upload the plugin to your plugins directory, activate it and view it in action i
 
 Wonder at its astonishing beauty.
 
+To take advantage of automatic updates and notifications, install the [GitHub Updater](https://github.com/afragen/github-updater). 
+
 ![Upload Permissions](screenshot.1.png)
 
 
 #### Changelog
 
+* _[v0.7.5]_ Now uses [GitHub Updater](https://github.com/afragen/github-updater) for updates/notifications.
 * _[v0.7.4]_ No longer enqueues jQuery since it's already present 
 * _[v0.7.3]_ Changed the order of the table headers to Read - Write
              Check for is_readable improved

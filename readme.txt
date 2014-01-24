@@ -40,7 +40,8 @@ I suspect it may not behave.
 1. Upload the unzipped plugin directory to your WordPress site 
 2. Alternatively, simply upload the zip file  tthe WordPress plugin page
 3. Activate
-4. Link to the plugin can be found in Dashboard -> Media menu
+4. Install the [GitHub Updater](https://github.com/afragen/github-updater) for auto updates/notifications. 
+5. Link to the plugin can be found in Dashboard -> Media menu
 
 == Screenshots ==
 
@@ -52,6 +53,8 @@ I suspect it may not behave.
 
 == Changelog ==
 
+= 0.7.5 =
+* Makes use of the [GitHub Updater](https://github.com/afragen/github-updater) for updates/notifications. (Separate install)
 = 0.7.4 =
 * No longer enqueues jQuery since it's already there.
 
