@@ -87,6 +87,7 @@ function wp_permissions_tools_page() {
         jQuery('#wp-permissions').dataTable( {
             "aaSorting": [[ 4, "desc" ]],
             "sDom": 'T<"clear">lfrtip',
+            "bProcessing": true,
             "TableTools": {
                 "sSwfPath": "<?php echo $swf_path; ?>"
             },
@@ -98,15 +99,13 @@ function wp_permissions_tools_page() {
     } );
     </script>
     <!-- end datatables settings -->
-
     <p>
     <form method="post" action="<?=$_SERVER['PHP_SELF']?>?page=wp_permissions">
-    <select name="bops">
+    <select name="listtype" id="listtype" onchange="this.form.submit();">
       <option value="NONE">Select List Type</option>
       <option value="DIRS">Just Directories</option>
       <option value="BOTH">Directories and Files</option>
     </select>
-    <input type="submit" name="submit" value="Submit" />
     </form>
     </p>
 
@@ -216,7 +215,7 @@ function getFileList($dir, $recurse=false, $depth=false) {
             }
         } 
 
-        elseif(is_readable("$dir$entry") && $_POST["bops"] == "BOTH")  {
+        elseif(is_readable("$dir$entry") && $_POST["listtype"] == "BOTH")  {
 
             // if fileinfo is available, use it, if not, call it a file
             if(function_exists(finfo_open)) {
